@@ -1,19 +1,48 @@
-plugins {
-    id 'java'
+buildscript {
+    ext {
+        springBootVersion = '2.6.3'
+        lombokVersion = '1.18.24'
+        mapstructVersion = '1.5.3.Final'
+        lombokMapstructBindingVersion = '0.2.0'
+
+        dependencies {
+            classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        }
+
+        repositories {
+            mavenCentral()
+        }
+    }
 }
 
-group 'com.gitgub.aspatsalyuk'
-version '0.0.1'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
 
-repositories {
-    mavenCentral()
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    compileJava.options.encoding = "UTF-8"
+    compileTestJava.options.encoding = "UTF-8"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation "org.projectlombok:lombok:${lombokVersion}"
+        implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+        implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}",  "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}",  "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    }
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+allprojects {
+    group 'com.gitgub.aspatsalyuk'
+    version '0.0.1'
 }
 
-test {
-    useJUnitPlatform()
-}
+
+
